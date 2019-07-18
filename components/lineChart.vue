@@ -21,18 +21,18 @@ export default {
   data() {
     return {
       tData: responseTime,
-      margin: 50,
-      width: 1024,
-      height: 768
+      margin: 0,
+      width: 0,
+      height: 0
     }
   },
   methods: {
 
   },
   mounted() {
-    var margin = this.margin
-    var width = this.width
-    var height = this.height
+    var margin = {top: 50, right: 50, bottom: 50, left: 50}
+    var width = window.innerWidth - margin.left - margin.right
+    var height = window.innerHeight - margin.top - margin.bottom
 
     var dataGroup = d3.select("linechart")
       .attr("width", width + margin)
@@ -45,38 +45,35 @@ export default {
         // console.log("Loading data");
         // console.log(data["metrics"][0]);
         // console.log("data loaded");
-        var d = data["metrics"];
-        console.log(d);
+        var d = data["metrics"][0];
+        console.log("You are here");
+        // console.log(d);
+        // console.log(d.date);
         // console.log(d[0].date);
         // console.log(d[0].averageResponseTime);
+
         var line = d3.line()
           .x(d => x(d.date))
           .y(d => y(d.averageResponseTime))
           ;
-        
-        // Attempting to make date time standard
-        // var parseTime = d3.timeParse("%m/%d/%Y");
-        // data["metrics"].forEach(function (d) {
-        //   console.log(d.date)
-        //   d.date = parseTime(d.date);
-        //   console.log(d.date)
-        // });
 
-        var x = d3.scaleTime()
-            .domain(d3.extent(data, function (d) {return d.date; }))
-            .range([0, width])
-            ;
+        // var x = d3.scaleTime()
+        //     .domain(d3.extent(data, function (d) {return d.date; }))
+        //     .range([0, width])
+        //     ;
+        // // console.log(x);
 
-        var y = d3.scaleLinear()
-            .domain(d3.extent(data, function (d) {return d.value; }))
-            .range([0, height])
-            ;
+        // var y = d3.scaleLinear()
+        //     .domain(d3.extent(data, function (d) {return d.value; }))
+        //     .range([0, height])
+        //     ;
+        // console.log(y);
 
         dataGroup.append("path")
-            .data([data])
-            .attr("fill", "none")
-            .attr("stroke", "red")
-            .attr("d", line)
+          .data([data["metrics"]])
+          .attr("fill", "none")
+          .attr("stroke", "red")
+          .attr("d", line)
 
       }, function(error) {
         console.log("error loading data");

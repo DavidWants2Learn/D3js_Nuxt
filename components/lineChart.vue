@@ -39,7 +39,7 @@ export default {
       .attr("height", height + 2 * margin)
       .append("g")
       .attr("transform", "translate(" + margin + ",")
-    
+
     d3.json('responsetime.json')
       .then(function(data) {
         // console.log("Loading data");
@@ -53,9 +53,18 @@ export default {
         // console.log(d[0].averageResponseTime);
 
         var line = d3.line()
-          .x(d => x(d.date))
-          .y(d => y(d.averageResponseTime))
+          .x(function(d) {return x(d.date); })
+          .y(function(d) {return y(d.averageResponseTime); })
+          .curve()
           ;
+
+        console.log(d.averageResponseTime)
+
+        var x = d3.scaleTime().range([0, width]);
+        x.domain(d3.extent(line, function(d) {return d.date}));
+    
+        var y = d3.scaleLinear().range([height, 0]);
+        x.domain([d3.min(line, function(d) {return d.averageResponseTime })-5, 100]);
 
         // var x = d3.scaleTime()
         //     .domain(d3.extent(data, function (d) {return d.date; }))
@@ -87,4 +96,17 @@ export default {
   svg {
     border: 1px solid grey;
 }
+
+.line {
+    fill: none;
+    stroke: #ffab00;
+    stroke-width: 3;
+}
+
+/* Style the dots by assigning a fill and stroke */
+.dot {
+    fill: #ffab00;
+    stroke: #fff;
+}
+
 </style>

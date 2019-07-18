@@ -73,7 +73,7 @@ export default {
     // d3.json({transactionData}, function(error, data) {
     d3.json('t.json')
     .then(function(data) {
-      console.log(data);
+      //console.log(data);
       console.log(data["metrics"][0].numberOfTransactions);
       
       var gRect = svg.append("g")

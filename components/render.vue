@@ -58,12 +58,12 @@ export default {
     
   },
   mounted() {
-    console.log("MOUNTED");
+    // console.log("MOUNTED");
     var values = this.values
     var currentX = this.initialX
     var currentY = this.initialY
 
-    console.log("RENDERING");
+    // console.log("RENDERING");
     var svg = d3.select(".renderclass")
       .append("svg")
       .attr("transform", "scale(0.5)")

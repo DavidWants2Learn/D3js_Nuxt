@@ -23,7 +23,8 @@ export default {
       tData: responseTime,
       margin: 0,
       width: 0,
-      height: 0
+      height: 0,
+      reISO: '/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/',
     }
   },
   methods: {
@@ -33,6 +34,7 @@ export default {
     var margin = {top: 50, right: 50, bottom: 50, left: 50}
     var width = window.innerWidth - margin.left - margin.right
     var height = window.innerHeight - margin.top - margin.bottom
+    var reISO = this.reISO
 
     var dataGroup = d3.select("linechart")
       .attr("width", width + margin)
@@ -45,26 +47,37 @@ export default {
         // console.log("Loading data");
         // console.log(data["metrics"][0]);
         // console.log("data loaded");
-        var d = data["metrics"][0];
-        console.log("You are here");
-        // console.log(d);
-        // console.log(d.date);
-        // console.log(d[0].date);
-        // console.log(d[0].averageResponseTime);
 
-        var line = d3.line()
-          .x(function(d) {return x(d.date); })
-          .y(function(d) {return y(d.averageResponseTime); })
-          .curve()
-          ;
+        // 2017-11-15T00:01:12Z
+        var d = data["metrics"][0].date;
+        var strictIsoParse = d3.utcParse("%Y-%m-%dT%H:%M:%S.%LZ");
+        if (typeof strictIsoParse != 'string')
+            console.log(strictIsoParse + " not a string");
+        else 
+            console.log(strictIsoParse + " is a string");
+        if (typeof d != 'string')
+            console.log(d + " not a string");
+        else 
+            console.log(d + " is a string");
 
-        console.log(d.averageResponseTime)
+        const now = new Date();
 
-        var x = d3.scaleTime().range([0, width]);
-        x.domain(d3.extent(line, function(d) {return d.date}));
+        // View the output
+        console.log(now);
+
+        // var line = d3.line()
+        //   .x(function(d) {return x(d.date); })
+        //   .y(function(d) {return y(d.averageResponseTime); })
+        //   .curve()
+        //   ;
+        
+        // console.log(d.averageResponseTime)
+
+        // var x = d3.scaleTime().range([0, width]);
+        // x.domain(d3.extent(line, function(d) {return d.date}));
     
-        var y = d3.scaleLinear().range([height, 0]);
-        x.domain([d3.min(line, function(d) {return d.averageResponseTime })-5, 100]);
+        // var y = d3.scaleLinear().range([height, 0]);
+        // x.domain([d3.min(line, function(d) {return d.averageResponseTime })-5, 100]);
 
         // var x = d3.scaleTime()
         //     .domain(d3.extent(data, function (d) {return d.date; }))
@@ -78,11 +91,11 @@ export default {
         //     ;
         // console.log(y);
 
-        dataGroup.append("path")
-          .data([data["metrics"]])
-          .attr("fill", "none")
-          .attr("stroke", "red")
-          .attr("d", line)
+        // dataGroup.append("path")
+        //   .data([data["metrics"]])
+        //   .attr("fill", "none")
+        //   .attr("stroke", "red")
+        //   .attr("d", line)
 
       }, function(error) {
         console.log("error loading data");

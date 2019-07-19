@@ -1,9 +1,10 @@
 <template>
   <div class="linechart">
-    <p>Line Chart</p>
-    <svg>
-        
-    </svg>
+    <div class="x-axis">
+      <svg>
+      
+      </svg>
+    </div>
   </div>
 </template>
 
@@ -35,6 +36,8 @@ export default {
     var width = window.innerWidth - margin.left - margin.right
     var height = window.innerHeight - margin.top - margin.bottom
     var reISO = this.reISO
+    const numberOfDaysWeek = 7;
+    const numberOfDaysMon = 30;
 
     var dataGroup = d3.select("linechart")
       .attr("width", width + margin)
@@ -44,26 +47,38 @@ export default {
 
     d3.json('responsetime.json')
       .then(function(data) {
-        // console.log("Loading data");
-        // console.log(data["metrics"][0]);
-        // console.log("data loaded");
 
-        // 2017-11-15T00:01:12Z
-        var d = data["metrics"][0].date;
-        var strictIsoParse = d3.utcParse("%Y-%m-%dT%H:%M:%S.%LZ");
-        if (typeof strictIsoParse != 'string')
-            console.log(strictIsoParse + " not a string");
-        else 
-            console.log(strictIsoParse + " is a string");
-        if (typeof d != 'string')
-            console.log(d + " not a string");
-        else 
-            console.log(d + " is a string");
+        var d = data["metrics"];
+        // d.forEach(obj => {
+        //   Object.entries(obj).forEach(([key, value]) => {
+        //     console.log(`${key}${value}`);
+            
+        //   });
+        // });
 
-        const now = new Date();
+        for (var i=0;i<numberOfDaysWeek;i++) {
+          console.log(d[i].date);
+        }
 
-        // View the output
-        console.log(now);
+        // var strictIsoParse = d3.utcParse("%Y-%m-%dT%H:%M:%S.%LZ");
+        // if (typeof strictIsoParse != 'string')
+        //     console.log(strictIsoParse + " not a string");
+        // else 
+        //     console.log(strictIsoParse + " is a string");
+        // if (typeof d != 'string')
+        //     console.log(d + " is date");
+        // else 
+        //     console.log(d + " is a string");
+
+        // const now = new Date();
+        // var day = now.getDate();
+        // var month = (now.getMonth()+1);
+        // console.log("month: "+month+" day: "+day);
+
+        // var scale = d3.scaleLinear()
+        //   .domain([0, 10]).range([0, 400]);
+        // var xAxis = d3.axisBottom().scale(scale);
+        //   d3.select('x-axis').call(xAxis);
 
         // var line = d3.line()
         //   .x(function(d) {return x(d.date); })

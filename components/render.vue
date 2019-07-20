@@ -48,10 +48,10 @@ export default {
       gRect
         .append("rect")
         .attr("fill", "blue")
-        .attr("width", 50)
-        .attr("height", radius)
-        .attr("x", currentX)
-        .attr("y", currenty);
+        .attr("width", 50) //bar width
+        .attr("height", radius) //bar height
+        .attr("x", currentX) //bargraph width 
+        .attr("y", currenty); //height from top right
     }
   },
   created() {

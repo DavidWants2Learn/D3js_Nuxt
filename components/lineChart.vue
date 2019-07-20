@@ -1,10 +1,5 @@
 <template>
-  <div class="linechart">
-    <div class="x-axis">
-      <svg>
-      
-      </svg>
-    </div>
+  <div id="linechart">
   </div>
 </template>
 
@@ -35,15 +30,15 @@ export default {
     var margin = {top: 50, right: 50, bottom: 50, left: 50}
     var width = window.innerWidth - margin.left - margin.right
     var height = window.innerHeight - margin.top - margin.bottom
-    var reISO = this.reISO
     const numberOfDaysWeek = 7;
     const numberOfDaysMon = 30;
 
-    var dataGroup = d3.select("linechart")
+    var dataGroup = d3.select("#linechart")
+      .append("svg")
       .attr("width", width + margin)
       .attr("height", height + 2 * margin)
       .append("g")
-      .attr("transform", "translate(" + margin + ",")
+      .attr("transform", "translate(" + margin + "," + margin + ")");
 
     var parseTime = d3.timeParse("%Y-%m-%dT%H:%M:%SZ");
 
@@ -51,16 +46,31 @@ export default {
       .then(function(data) {
 
         var d = data["metrics"];
-        // d.forEach(obj => {
-        //   Object.entries(obj).forEach(([key, value]) => {
-        //     console.log(`${key}${value}`);
-            
-        //   });
-        // });
 
-        for (var i=0;i<numberOfDaysWeek;i++) {
-          console.log(d[i].date);
-        }
+        var line = d3.line()
+          .x(d => x(d.date))
+          .y(d => y(d.averageResponseTime))
+          ;
+
+        d.forEach(function (d) {
+          d.date = parseTime(d.date);
+        })
+
+        var x = d3.scaleTime()
+          .domain(d3.extent(d, function (i) { return i.date; }))
+          .range([0, width])
+          ;
+        
+        var y = d3.scaleLinear()
+          .domain(d3.extent(d, function (i) { return i.averageResponseTime; }))
+          .range([height, 0])
+          ;
+
+        dataGroup.append("path")
+          .data([d])
+          .attr("fill", "none")
+          .attr("stroke", "red")
+          .attr("d", line)
 
         // var strictIsoParse = d3.utcParse("%Y-%m-%dT%H:%M:%S.%LZ");
         // if (typeof strictIsoParse != 'string')

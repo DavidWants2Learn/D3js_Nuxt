@@ -17,7 +17,8 @@
     "d3": "^5.9.7",
     "d3-fetch": "^1.1.2",
     "nuxt": "^2.0.0",
-    "vue-d3": "^0.1.0"
+    "vue-d3": "^0.1.0",
+    "vue-moment": "^4.0.0"
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.27",

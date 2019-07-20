@@ -45,6 +45,8 @@ export default {
       .append("g")
       .attr("transform", "translate(" + margin + ",")
 
+    var parseTime = d3.timeParse("%Y-%m-%dT%H:%M:%SZ");
+
     d3.json('responsetime.json')
       .then(function(data) {
 

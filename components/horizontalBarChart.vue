@@ -25,6 +25,7 @@ export default {
   data() {
     return {
       sData: statusData,
+      margin: 
     }
   },
   methods: {
@@ -34,11 +35,32 @@ export default {
     
   },
   mounted() {
+    var margin = {top: 50, right: 50, bottom: 50, left: 50};
+    var width = window.innerWidth - margin.left + margin.right;
+    var height = window.innerHeight - margin.top + margin.bottom;
+    const numberOfDaysWeek = 7;
+    const numberOfDaysMon = 30;
+
+    var svg = d3.select("HorizontalBarChart")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
     d3.json('status.json')
     .then(function(data) {
-      console.log(data);
-    }, function(error) {
+      var de = data["environments"];
+      var di = data["incidents"];
 
+    var x = d3.scaleLinear()
+      .range([0, width])
+      .domain([0, d3.max(d)])
+
+      
+
+    }, function(error) {
+      
     });
   }
 }

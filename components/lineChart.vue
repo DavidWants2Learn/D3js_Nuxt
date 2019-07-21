@@ -1,5 +1,6 @@
 <template>
-  <div id="linechart">
+  <div class="linechart">
+    <p>LineChart</p>
   </div>
 </template>
 
@@ -26,17 +27,19 @@ export default {
 
   },
   mounted() {
-    var margin = {top: 50, right: 50, bottom: 50, left: 50}
-    var width = window.innerWidth - margin.left - margin.right
-    var height = window.innerHeight - margin.top - margin.bottom
+    var margin = {top: 50, right: 50, bottom: 50, left: 50};
+    var width = window.innerWidth - margin.left - margin.right;
+    var height = window.innerHeight - margin.top - margin.bottom;
     const numberOfDaysWeek = 7;
     const numberOfDaysMon = 30;
     var d = [];
 
-    var dataGroup = d3.select("#linechart")
+    var dataGroup = d3.select(".linechart")
       .append("svg")
-      .attr("width", width + margin)
-      .attr("height", height + 2 * margin)
+      .attr("width", width)
+      //  + margin)
+      .attr("height", height)
+      //  + 2 * margin)
       .append("g")
       .attr("transform", "translate(" + margin + "," + margin + ")");
 
@@ -62,7 +65,7 @@ export default {
 
         var x = d3.scaleTime()
           .domain(d3.extent(d, function (i) { return i.date; }))
-          .range([0, width])
+          .range([0, width - margin.right], .1)
           ;
         
         var y = d3.scaleLinear()
@@ -82,7 +85,9 @@ export default {
           .attr("transform", "translate(0," + height + ")")
 
         var xAxis = d3.axisBottom(x)
-          .tickFormat(d3.timeFormat("%m-%d"));
+          .tickFormat(d3.timeFormat("%m-%d"))
+          // .tickPadding(10)
+          ;
 
         xAxis(xAxisGroup);
 
@@ -90,7 +95,9 @@ export default {
           .append("g")
           .attr("class", "yAxisGroup")
 
-        var yAxis = d3.axisLeft(y);
+        var yAxis = d3.axisRight(y)
+          .ticks(10)
+          ;
 
         yAxis(yAxisGroup);
 
@@ -103,8 +110,15 @@ export default {
 </script>
 
 <style>
-  svg {
+svg {
     border: 1px solid grey;
+    width: 1000px;
+    height: 1000px;
+    padding: 50px;
+}
+
+.yAxisGroup {
+  padding: 100px;
 }
 
 .line {
@@ -112,11 +126,4 @@ export default {
     stroke: #ffab00;
     stroke-width: 3;
 }
-
-/* Style the dots by assigning a fill and stroke */
-.dot {
-    fill: #ffab00;
-    stroke: #fff;
-}
-
 </style>

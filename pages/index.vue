@@ -1,6 +1,9 @@
 <template>
   <div id="bartarget">
     <div>
+      <horizontalBarChart />
+    </div>
+    <div>
       <render />
     </div>
     <div>
@@ -17,11 +20,13 @@ import axios from 'axios'
 // import transactionData from '~/assets/data/transaction.json'
 import render from '~/components/render.vue'
 import lineChart from '~/components/lineChart.vue'
+import horizontalBarChart from '~/components/horizontalBarChart.vue'
 
 export default {
   components: {
     render,
-    lineChart
+    lineChart,
+    horizontalBarChart
   }
 }
 </script>

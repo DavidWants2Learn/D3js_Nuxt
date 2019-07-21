@@ -20,7 +20,6 @@ export default {
       margin: 0,
       width: 0,
       height: 0,
-      reISO: '/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/',
     }
   },
   methods: {
@@ -32,6 +31,7 @@ export default {
     var height = window.innerHeight - margin.top - margin.bottom
     const numberOfDaysWeek = 7;
     const numberOfDaysMon = 30;
+    var d = [];
 
     var dataGroup = d3.select("#linechart")
       .append("svg")
@@ -44,17 +44,21 @@ export default {
 
     d3.json('responsetime.json')
       .then(function(data) {
+        // console.log(data["metrics"][0])
 
-        var d = data["metrics"];
+        for (var i = 0; i<numberOfDaysWeek; i++) {
+          d[i] = data["metrics"][i];
+          d[i].date = parseTime(d[i].date)
+        }
 
         var line = d3.line()
           .x(d => x(d.date))
           .y(d => y(d.averageResponseTime))
           ;
 
-        d.forEach(function (d) {
-          d.date = parseTime(d.date);
-        })
+        // d.forEach(function (d) {
+        //   d.date = parseTime(d.date);
+        // })
 
         var x = d3.scaleTime()
           .domain(d3.extent(d, function (i) { return i.date; }))
@@ -69,60 +73,26 @@ export default {
         dataGroup.append("path")
           .data([d])
           .attr("fill", "none")
-          .attr("stroke", "red")
+          .attr("stroke", "blue")
           .attr("d", line)
 
-        // var strictIsoParse = d3.utcParse("%Y-%m-%dT%H:%M:%S.%LZ");
-        // if (typeof strictIsoParse != 'string')
-        //     console.log(strictIsoParse + " not a string");
-        // else 
-        //     console.log(strictIsoParse + " is a string");
-        // if (typeof d != 'string')
-        //     console.log(d + " is date");
-        // else 
-        //     console.log(d + " is a string");
+        var xAxisGroup = dataGroup
+          .append("g")
+          .attr("class", "xAxisGroup")
+          .attr("transform", "translate(0," + height + ")")
 
-        // const now = new Date();
-        // var day = now.getDate();
-        // var month = (now.getMonth()+1);
-        // console.log("month: "+month+" day: "+day);
+        var xAxis = d3.axisBottom(x)
+          .tickFormat(d3.timeFormat("%m-%d"));
 
-        // var scale = d3.scaleLinear()
-        //   .domain([0, 10]).range([0, 400]);
-        // var xAxis = d3.axisBottom().scale(scale);
-        //   d3.select('x-axis').call(xAxis);
+        xAxis(xAxisGroup);
 
-        // var line = d3.line()
-        //   .x(function(d) {return x(d.date); })
-        //   .y(function(d) {return y(d.averageResponseTime); })
-        //   .curve()
-        //   ;
-        
-        // console.log(d.averageResponseTime)
+        var yAxisGroup = dataGroup
+          .append("g")
+          .attr("class", "yAxisGroup")
 
-        // var x = d3.scaleTime().range([0, width]);
-        // x.domain(d3.extent(line, function(d) {return d.date}));
-    
-        // var y = d3.scaleLinear().range([height, 0]);
-        // x.domain([d3.min(line, function(d) {return d.averageResponseTime })-5, 100]);
+        var yAxis = d3.axisLeft(y);
 
-        // var x = d3.scaleTime()
-        //     .domain(d3.extent(data, function (d) {return d.date; }))
-        //     .range([0, width])
-        //     ;
-        // // console.log(x);
-
-        // var y = d3.scaleLinear()
-        //     .domain(d3.extent(data, function (d) {return d.value; }))
-        //     .range([0, height])
-        //     ;
-        // console.log(y);
-
-        // dataGroup.append("path")
-        //   .data([data["metrics"]])
-        //   .attr("fill", "none")
-        //   .attr("stroke", "red")
-        //   .attr("d", line)
+        yAxis(yAxisGroup);
 
       }, function(error) {
         console.log("error loading data");

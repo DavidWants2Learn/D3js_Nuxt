@@ -83,7 +83,7 @@ export default {
       data["metrics"].forEach(x => drawRect(gRect, (x.numberOfTransactions)/50000, currentX += 55, currentY));
 
     }, function(error) {
-      console.log("DIDNT WORK");
+      console.log("JSON Data failed to upload.");
     });
   }
 }

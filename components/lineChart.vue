@@ -78,16 +78,18 @@ export default {
           .data([d])
           .attr("fill", "none")
           .attr("stroke", "blue")
-          .attr("d", line)
+          .attr("d", line);
 
         dataGroup.selectAll(".dot")
-          .data(d)
+            .data(d)
           .enter()
-          .append("circle")
-          .attr("class", "dot")
-          .attr("cx", function(d) {return x(i)})
-          .attr("cy", function(d) {return y(d.averageResponseTime)})
-          .attr("r", 5);
+            .append("circle")
+            .attr("class", "dot")
+            .attr("cx", function(i) {return x(i.date)})
+            .attr("cy", function(i) {return y(i.averageResponseTime)})
+            .attr("r", 3)
+            .style("fill", "red")
+            ;
 
         // Create xAxis
         var xAxisGroup = dataGroup

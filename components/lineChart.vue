@@ -49,40 +49,52 @@ export default {
       .then(function(data) {
         // console.log(data["metrics"][0])
 
+        // Only use 7 data elements
         for (var i = 0; i<numberOfDaysWeek; i++) {
           d[i] = data["metrics"][i];
           d[i].date = parseTime(d[i].date)
         }
 
+        // Instantiate d3 line
         var line = d3.line()
           .x(d => x(d.date))
           .y(d => y(d.averageResponseTime))
           ;
 
-        // d.forEach(function (d) {
-        //   d.date = parseTime(d.date);
-        // })
-
+        // Parse date string as date type
         var x = d3.scaleTime()
           .domain(d3.extent(d, function (i) { return i.date; }))
           .range([0, width - margin.right], .1)
           ;
         
+        // Parse averageResponseTime
         var y = d3.scaleLinear()
           .domain(d3.extent(d, function (i) { return i.averageResponseTime; }))
           .range([height, 0])
           ;
 
+        // Draw Line
         dataGroup.append("path")
           .data([d])
           .attr("fill", "none")
           .attr("stroke", "blue")
           .attr("d", line)
 
+        dataGroup.selectAll(".dot")
+          .data(d)
+          .enter()
+          .append("circle")
+          .attr("class", "dot")
+          .attr("cx", function(d) {return x(i)})
+          .attr("cy", function(d) {return y(d.averageResponseTime)})
+          .attr("r", 5);
+
+        // Create xAxis
         var xAxisGroup = dataGroup
           .append("g")
           .attr("class", "xAxisGroup")
           .attr("transform", "translate(0," + height + ")")
+          // .attr("transform", "translate(0," + height + ")")
 
         var xAxis = d3.axisBottom(x)
           .tickFormat(d3.timeFormat("%m-%d"))
@@ -91,12 +103,14 @@ export default {
 
         xAxis(xAxisGroup);
 
+        // Create yAxis
         var yAxisGroup = dataGroup
           .append("g")
           .attr("class", "yAxisGroup")
+          // .attr("transform", "translate(0, 0)")
 
         var yAxis = d3.axisRight(y)
-          .ticks(10)
+          // .ticks(10)
           ;
 
         yAxis(yAxisGroup);
